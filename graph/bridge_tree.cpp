@@ -1,0 +1,73 @@
+class Bridge_tree { // 0 indexed
+private:
+    int n, k;
+    vector<vector<int>> g;
+    vector<bool> used;
+    vector<int> comp, ord, low;
+    vector<pair<int, int>> br;
+
+    void dfs(int x, int prv, int &c) {
+        used[x] = 1;
+        ord[x] = c++;
+        low[x] = n;
+        bool mul = 0;
+        for (auto y : g[x]) {
+            if (used[y]) {
+                if (y != prv || mul)
+                    low[x] = min(low[x], ord[y]);
+                else
+                    mul = 1;
+                continue;
+            }
+            dfs(y, x, c);
+            low[x] = min(low[x], low[y]);
+        }
+    }
+
+    void dfs2(int x, int num) {
+        comp[x] = num;
+        for (auto y : g[x]) {
+            if (comp[y] != -1) continue;
+            if (ord[x] < low[y]) {
+                br.push_back({x, y});
+                k++;
+                dfs2(y, k);
+            }
+            else
+                dfs2(y, num);
+        }
+    }
+
+public:
+    Bridge_tree(const vector<vector<int>> &g) : g(g), n(g.size()), used(n), comp(n, -1), ord(n), low(n), k(0) {
+        int c = 0;
+        for (int i = 0; i < n; i++) {
+            if (used[i]) continue;
+            dfs(i, -1, c);
+            dfs2(i, k);
+            k++;
+        }
+    }
+
+    int component(int node) { return comp[node]; }
+    int component_cnt() { return k; }
+    vector<pair<int, int>> get_bridges() { return br; }
+
+    vector<vector<int>> get_all_comp() {
+        vector<vector<int>> ret(k);
+        for (int i = 0; i < n; i++) {
+            ret[comp[i]].push_back(i);
+        }
+        return ret;
+    }
+
+    vector<vector<int>> bridge_tree() {
+        vector<vector<int>> t(k);
+        for (auto e : br) {
+            int x = comp[e.first], y = comp[e.second];
+            t[x].push_back(y);
+            t[y].push_back(x);
+        }
+        return t;
+    }
+};
