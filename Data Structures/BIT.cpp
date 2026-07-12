@@ -1,25 +1,21 @@
 struct BIT {
+    int n;
     vector<int64_t> bit;
 
-    BIT(int n) {
+    BIT(int _n) {
+        n = _n;
         bit.assign(n + 1, 0);
     }
 
-    void add(int i, int64_t val) {
-        ++i;
-        while (i < (int)bit.size()) {
-            bit[i] += val;
-            i += (i & -i);
-        }
+    void add(int idx, int64_t val) {
+        for (; idx <= n; idx += idx & -idx)
+            bit[idx] += val;
     }
 
-    int64_t get(int i) {
-        ++i;
+    int64_t get(int idx) {
         int64_t ret = 0;
-        while (i) {
-            ret += bit[i];
-            i -= (i & -i);
-        }
+        for (; idx > 0; idx -= idx & -idx)
+            ret += bit[idx];
         return ret;
     }
 
@@ -37,12 +33,12 @@ struct BIT {
         int64_t sum = 0;
         int pos = 0;
 
-        for (int i = __lg((int)bit.size() - 1); i >= 0; --i) {
-            if (pos + (1 << i) < (int)bit.size() &&
+        for (int i = __lg((int) bit.size() - 1); i >= 0; --i) {
+            if (pos + (1 << i) < (int) bit.size() &&
                 sum + bit[pos + (1 << i)] < v) {
                 sum += bit[pos + (1 << i)];
                 pos += (1 << i);
-                }
+            }
         }
 
         return pos;
