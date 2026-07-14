@@ -13,7 +13,7 @@ struct hash_subtree {
             in[u] = timer;
             order[timer++] = vals[u];
             for (int v : adj[u]) {
-                if (v != p) dfs(v, u); // Call dfs directly without passing 'self'
+                if (v != p) dfs(v, u);
             }
             out[u] = timer - 1;
         };
