@@ -1,3 +1,4 @@
+// Base 0
 class dr_string {
 private:
     static const int64_t mod = (1LL << 61) - 1;
