@@ -10,7 +10,9 @@ struct Trie {
     };
 
     vector<Node> tree;
-
+    Trie() {
+        new_node();
+    }
     bool valid(int u) {
         return u != -1 && tree[u].prefixes > 0;
     }
@@ -25,8 +27,10 @@ struct Trie {
         tree[u].prefixes += cnt;
         for (char c : s) {
             int v = c - BASE;
-            if (tree[u].nxt[v] == -1)
-                tree[u].nxt[v] = new_node();
+            if (tree[u].nxt[v] == -1) {
+                int new_idx = new_node();
+                tree[u].nxt[v] = new_idx;
+            }
             u = tree[u].nxt[v];
             tree[u].prefixes += cnt;
         }
