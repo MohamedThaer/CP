@@ -147,7 +147,33 @@ struct BinaryTrie {
     long long count_greater_equal(long long x) {
         return size() - count_less(x);
     }
-
+     int64_t get_mex() {
+        int cur = 0, mex = 0;
+        for (int bit = LOG - 1; ~bit; bit--) {
+            int full = (1LL << bit);
+            int left = tree[cur].child[0];
+            if (valid(left) && tree[left].cnt == full) {
+                mex |= full;
+                cur = tree[cur].child[1];
+            } else cur = left;
+            if (!valid(cur)) break;
+        }
+        return mex;
+    }
+ 
+    int64_t get_mex_xor(int x) {
+        int cur = 0, mex = 0;
+        for (int bit = LOG - 1; ~bit; bit--) {
+            int xb = (x >> bit) & 1, full = (1LL << bit);
+            int sub = tree[cur].child[xb];
+            if (valid(sub) && tree[sub].cnt == full) {
+                mex |= full;
+                cur = tree[cur].child[xb ^ 1];
+            } else cur = sub;
+            if (!valid(cur)) break;
+        }
+        return mex;
+    }
     int size() {
         return tree[0].cnt;
     }
