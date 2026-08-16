@@ -1,3 +1,6 @@
+$$\sum_{i<j} a_i a_j = \frac{\left( \sum_{i=1}^{n} a_i \right)^2 - \sum_{i=1}^{n} a_i^2}{2}$$
+
+
 // sum of numbers divisible by d in range
 int calc(int l, int r, int d) {
   --l;
