@@ -80,3 +80,32 @@ struct DSU {
         return result;
     }
 };
+struct Edge{
+  int u, v, w;
+  Edge(int u = 0, int v = 0, int w = 0) : u(u), v(v), w(w) {}
+  bool operator<(const Edge &other) const{
+    return w < other.w;
+  }
+};
+
+ll kruskal(int n, vector<Edge> &edges){
+  sort(all(edges)); 
+  DSU dsu(n);
+  ll mst_cst = 0;
+  int edges_used = 0;
+
+  for (auto &e : edges){
+    if (dsu.unite(e.u, e.v)){
+      mst_cst += e.w;
+      edges_used++;
+      if (edges_used == n-1)
+        return mst_cst;
+    }
+  }
+  if (edges_used != n - 1)
+    return -1; 
+  return mst_cst;
+
+  // edges.reserve(m); // # of edges
+  // edges.emplace_back(u, v, w);
+}
