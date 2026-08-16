@@ -1,0 +1,42 @@
+// seg tree with hash remember to multiply with inv[l]
+in the query
+// to get prev go to the right before the left
+int next_greater(int l, int r, int val, int x, int lx, int rx) {
+    if (lx >= r or l >= rx) return -1;
+    if (node[x].mx <= val) return -1;
+    if (rx - lx == 1) return lx;
+    int ans = next_greater(l, r, val, lNode, lx, md);
+    if (ans == -1)
+        return next_greater(l, r, val, rNode, md, rx);
+    return ans;
+}
+int next_smaller(int l, int r, int val, int x, int lx, int rx) {
+    if (lx >= r or l >= rx) return -1;
+    if (node[x].mn >= val) return -1;
+    if (rx - lx == 1) return lx;
+    int ans = next_smaller(l, r, val, lNode, lx, md);
+    if (ans == -1)
+        return next_smaller(l, r, val, rNode, md, rx);
+    return ans;
+}
+int kth_one(int k, int x, int lx, int rx) {
+    if (rx - lx == 1)
+        return lx;
+    if (k < node[lNode].sum)
+        return find_kth_one(k, lNode, lx, md);
+    return find_kth_one(k - node[lNode].sum, rNode,
+    md, rx);
+}
+int kth_one(int k) {
+    if(node[0].sum < k) return -1;
+    return kth_one(k, 0, 0, n);
+}
+// max subarray sum
+Node merge(Node &l, Node &r) {
+  Node res = Node();
+  res.ans = max({l.ans, r.ans, l.suff + r.pre});
+  res.pre = max(l.pre, l.sum + r.pre);
+  res.suff = max(r.suff, r.sum + l.suff);
+  res.sum = r.sum + l.sum;
+  return res;
+}
